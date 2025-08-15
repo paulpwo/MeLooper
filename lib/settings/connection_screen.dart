@@ -2,10 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import '../config/midi_config.dart';
-import '../config/app_theme.dart';
 
 class ConnectionScreen extends StatefulWidget {
-  const ConnectionScreen({Key? key}) : super(key: key);
+  const ConnectionScreen({super.key});
 
   @override
   ConnectionScreenState createState() => ConnectionScreenState();
