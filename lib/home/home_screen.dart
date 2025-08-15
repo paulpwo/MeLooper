@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+// Imports removidos - paquetes no disponibles
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import '../settings/connection_screen.dart';
@@ -10,6 +11,7 @@ import '../widgets/connection_button_widget.dart';
 import 'widgets/build_pad_widget.dart';
 import 'widgets/midi_pads_tab.dart';
 import 'widgets/pad_configuration_tab.dart';
+import '../models/midi_pad.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -177,20 +179,13 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           children: [
             // Tab 0: MIDI Pads
             MidiPadsTab(
-              pad1CC: _midiConfig.pad1CC,
-              pad2CC: _midiConfig.pad2CC,
-              onPad1Tap: () => _sendPadMidi(_midiConfig.pad1CC, 60),
-              onPad2Tap: () => _sendPadMidi(_midiConfig.pad2CC, 62),
+              midiPads: _midiConfig.midiPads,
               animationController: _pulseController,
+              onPadTap: _sendPadMidi,
             ),
 
             // Tab 1: Pad Configuration
-            PadConfigurationTab(
-              pad1CC: _midiConfig.pad1CC,
-              pad2CC: _midiConfig.pad2CC,
-              onPad1CCIncrement: () => _midiConfig.incrementPad1CC(),
-              onPad2CCIncrement: () => _midiConfig.incrementPad2CC(),
-            ),
+            const PadConfigurationTab(),
           ],
         ),
       ),

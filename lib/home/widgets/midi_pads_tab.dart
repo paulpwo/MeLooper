@@ -1,47 +1,68 @@
 import 'package:flutter/material.dart';
 import '../../config/app_theme.dart';
+import '../../models/midi_pad.dart';
 import 'build_pad_widget.dart';
 
 class MidiPadsTab extends StatelessWidget {
-  final int pad1CC;
-  final int pad2CC;
-  final VoidCallback onPad1Tap;
-  final VoidCallback onPad2Tap;
+  final List<MidiPad> midiPads;
   final AnimationController animationController;
+  final Function(int cc, int note) onPadTap;
 
   const MidiPadsTab({
     super.key,
-    required this.pad1CC,
-    required this.pad2CC,
-    required this.onPad1Tap,
-    required this.onPad2Tap,
+    required this.midiPads,
     required this.animationController,
+    required this.onPadTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: AppTheme.spacingL),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Pad 1
-          BuildPadWidget(
-            label: 'UNDERGROUND',
-            subtitle: 'CC $pad1CC',
-            color: AppTheme.errorColor,
-            onTap: onPad1Tap,
-            animationController: animationController,
+          // Primera fila de pads
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: midiPads.take(2).map((pad) {
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
+                  child: BuildPadWidget(
+                    label: pad.label,
+                    subtitle: pad.subtitle,
+                    color: pad.color,
+                    onTap: () => onPadTap(pad.cc, pad.note),
+                    animationController: animationController,
+                  ),
+                ),
+              );
+            }).toList(),
           ),
 
-          // Pad 2
-          BuildPadWidget(
-            label: 'MY UNDERGROUND',
-            subtitle: 'CC $pad2CC',
-            color: AppTheme.secondaryVariant,
-            onTap: onPad2Tap,
-            animationController: animationController,
-          ),
+          SizedBox(height: AppTheme.spacingL),
+
+          // Segunda fila de pads (si hay más de 2)
+          if (midiPads.length > 2)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: midiPads.skip(2).take(2).map((pad) {
+                return Expanded(
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
+                    child: BuildPadWidget(
+                      label: pad.label,
+                      subtitle: pad.subtitle,
+                      color: pad.color,
+                      onTap: () => onPadTap(pad.cc, pad.note),
+                      animationController: animationController,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
         ],
       ),
     );

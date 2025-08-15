@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../config/app_theme.dart';
+import '../../config/midi_config.dart';
 
 class PadConfigurationTab extends StatelessWidget {
-  final int pad1CC;
-  final int pad2CC;
-  final VoidCallback onPad1CCIncrement;
-  final VoidCallback onPad2CCIncrement;
-
-  const PadConfigurationTab({
-    Key? key,
-    required this.pad1CC,
-    required this.pad2CC,
-    required this.onPad1CCIncrement,
-    required this.onPad2CCIncrement,
-  }) : super(key: key);
+  const PadConfigurationTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final midiConfig = MidiConfig();
+    
     return Container(
       margin: EdgeInsets.all(AppTheme.spacingL),
       child: Column(
@@ -59,14 +51,49 @@ class PadConfigurationTab extends StatelessWidget {
 
           SizedBox(height: AppTheme.spacingL),
 
-          // Configuration Items
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildConfigItem('Pad 1 CC', '$pad1CC', onPad1CCIncrement),
-              SizedBox(width: AppTheme.spacingL),
-              _buildConfigItem('Pad 2 CC', '$pad2CC', onPad2CCIncrement),
-            ],
+          // Configuration Items - Ahora dinámico basado en midiPads
+          ListenableBuilder(
+            listenable: midiConfig,
+            builder: (context, child) {
+              return Column(
+                children: [
+                  // Primera fila de pads
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildConfigItem(
+                          'Pad 1 CC',
+                          '${midiConfig.midiPads[0].cc}',
+                          () => midiConfig.incrementPadCC(0)),
+                      SizedBox(width: AppTheme.spacingL),
+                      _buildConfigItem(
+                          'Pad 2 CC',
+                          '${midiConfig.midiPads[1].cc}',
+                          () => midiConfig.incrementPadCC(1)),
+                    ],
+                  ),
+
+                  if (midiConfig.midiPads.length > 2) ...[
+                    SizedBox(height: AppTheme.spacingM),
+                    // Segunda fila de pads
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildConfigItem(
+                            'Pad 3 CC',
+                            '${midiConfig.midiPads[2].cc}',
+                            () => midiConfig.incrementPadCC(2)),
+                        SizedBox(width: AppTheme.spacingL),
+                        _buildConfigItem(
+                            'Pad 4 CC',
+                            '${midiConfig.midiPads[3].cc}',
+                            () => midiConfig.incrementPadCC(3)),
+                      ],
+                    ),
+                  ],
+                ],
+              );
+            },
           ),
 
           SizedBox(height: AppTheme.spacingL),
@@ -100,7 +127,7 @@ class PadConfigurationTab extends StatelessWidget {
                   '• Tap each CC value to increment it\n'
                   '• Values range from 0 to 127\n'
                   '• Map these CC values in your DAW\n'
-                  '• Both pads send CC + Note messages',
+                  '• All pads send CC + Note messages',
                   style: AppTheme.bodyMedium.copyWith(
                     color: AppTheme.textTertiary,
                     height: 1.5,
