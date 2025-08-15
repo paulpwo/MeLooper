@@ -4,9 +4,8 @@ A MIDI loop controller.
 
 ## Roadmap
 - [x] Play midi Pads
-- [x] Configure midi Pads
-- [ ] Connect to midi device
-- [ ] Record midi loops
+- [x] Configure midi Pads (Mapping)
+- [x] Connect to midi device
 - [ ] Play midi loops
 - [ ] Load midi programs
 - [ ] Save midi programs to file
