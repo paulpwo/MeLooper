@@ -8,7 +8,7 @@ class PadConfigurationTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final midiConfig = MidiConfig();
-    
+
     return Container(
       margin: EdgeInsets.all(AppTheme.spacingL),
       child: Column(

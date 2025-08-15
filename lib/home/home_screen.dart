@@ -97,10 +97,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
         // Send Note On/Off for additional control
         NoteOnMessage(
-                channel: _midiConfig.midiChannel,
-                note: noteValue,
-                velocity: 100)
-            .send();
+          channel: _midiConfig.midiChannel,
+          note: noteValue,
+          velocity: 100,
+        ).send();
         Future.delayed(const Duration(milliseconds: 100), () {
           NoteOffMessage(channel: _midiConfig.midiChannel, note: noteValue)
               .send();
