@@ -1,28 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:se_loop/config/app_theme.dart';
 
-class BuildPadWidget extends StatelessWidget {
+class BuildPadWidget extends StatefulWidget {
   const BuildPadWidget({
     super.key,
     required this.label,
     required this.subtitle,
     required this.color,
     required this.onTap,
-    required this.animationController,
   });
 
   final String label;
   final String subtitle;
   final Color color;
   final VoidCallback onTap;
-  final AnimationController animationController;
+
+  @override
+  State<BuildPadWidget> createState() => _BuildPadWidgetState();
+}
+
+class _BuildPadWidgetState extends State<BuildPadWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 15),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _onTap() {
+    _animationController.forward().then((_) {
+      _animationController.reverse();
+    });
+    widget.onTap();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: _onTap,
       child: AnimatedBuilder(
-        animation: animationController,
+        animation: _animationController,
         builder: (context, child) {
           return Container(
             width: 280,
@@ -33,17 +61,17 @@ class BuildPadWidget extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  color.withValues(alpha: 0.8),
-                  color.withValues(alpha: 0.6),
-                  color.withValues(alpha: 0.4),
+                  widget.color.withValues(alpha: 0.8),
+                  widget.color.withValues(alpha: 0.6),
+                  widget.color.withValues(alpha: 0.4),
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: color.withValues(
-                      alpha: 0.3 + (animationController.value * 0.2)),
-                  blurRadius: 20 + (animationController.value * 10),
-                  spreadRadius: 5 + (animationController.value * 5),
+                  color: widget.color.withValues(
+                      alpha: 0.4 + (_animationController.value * 0.3)),
+                  blurRadius: 8 + (_animationController.value * 4),
+                  spreadRadius: 2 + (_animationController.value * 2),
                 ),
                 BoxShadow(
                   color: AppTheme.shadowColor,
@@ -65,7 +93,7 @@ class BuildPadWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      label,
+                      widget.label,
                       style: AppTheme.titleLarge.copyWith(
                         color: AppTheme.textPrimary,
                         fontWeight: FontWeight.bold,
@@ -74,7 +102,7 @@ class BuildPadWidget extends StatelessWidget {
                     ),
                     SizedBox(height: AppTheme.spacingS),
                     Text(
-                      subtitle,
+                      widget.subtitle,
                       style: AppTheme.bodyMedium.copyWith(
                         color: AppTheme.textPrimary.withValues(alpha: 0.8),
                         fontWeight: FontWeight.w500,

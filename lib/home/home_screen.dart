@@ -1,20 +1,19 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 // Imports removidos - paquetes no disponibles
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import '../settings/connection_screen.dart';
-import '../config/midi_config.dart';
+
 import '../config/app_theme.dart';
-import '../widgets/connection_status_widget.dart';
+import '../config/midi_config.dart';
 import '../widgets/connection_button_widget.dart';
-import 'widgets/build_pad_widget.dart';
+import '../widgets/connection_status_widget.dart';
 import 'widgets/midi_pads_tab.dart';
 import 'widgets/pad_configuration_tab.dart';
-import '../models/midi_pad.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -180,7 +179,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             // Tab 0: MIDI Pads
             MidiPadsTab(
               midiPads: _midiConfig.midiPads,
-              animationController: _pulseController,
               onPadTap: _sendPadMidi,
             ),
 

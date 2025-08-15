@@ -14,9 +14,4 @@ class MidiPad {
     required this.subtitle,
     required this.color,
   });
-
-  // Método para enviar MIDI (se implementará en el home)
-  void sendMidi(Function(int cc, int note) sendMidiFunction) {
-    sendMidiFunction(cc, note);
-  }
 }
