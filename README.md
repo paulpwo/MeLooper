@@ -2,8 +2,7 @@
 
 A MIDI loop controller.
 
-## Features
-
+## Roadmap
 - [x] Play midi Pads
 - [x] Configure midi Pads
 - [ ] Connect to midi device
