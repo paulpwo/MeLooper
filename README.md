@@ -1,16 +1,18 @@
 # MeLooper
 
-A new Flutter project.
+A MIDI loop controller.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+[x] - Play midi Pads
+[x] - Configure midi Pads
+[ ] - Connect to midi device
+[ ] - Record midi loops
+[ ] - Play midi loops
+[ ] - Load midi programs
+[ ] - Save midi programs to file
+[ ] - Load midi programs from file
+[ ] - Edit midi programs
+[ ] - Export midi programs to file
+[ ] - Import midi programs from file
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
