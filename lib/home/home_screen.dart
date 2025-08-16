@@ -53,34 +53,63 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     try {
       final devices = await _midiCommand.devices;
       if (devices != null) {
+        // Verificar si hay dispositivos virtuales conectados
+        final hasVirtualDevice = devices
+            .any((device) => device.type == 'virtual' && device.connected);
+
+        // Verificar si hay dispositivos físicos conectados
+        final hasPhysicalDevice = devices
+            .any((device) => device.type != 'virtual' && device.connected);
+        
         setState(() {
-          _hasConnectedDevice = devices.any((device) => device.connected);
+          _hasConnectedDevice = hasVirtualDevice || hasPhysicalDevice;
         });
+        
+        // Debug info
+        if (mounted) {
+          print('MIDI Devices found: ${devices.length}');
+          for (var device in devices) {
+            print(
+                'Device: ${device.name} (${device.type}) - Connected: ${device.connected}');
+          }
+        }
       }
-    } catch (_) {
+    } catch (e) {
+      print('Error checking MIDI connection: $e');
     }
   }
 
   void _sendPadMidi(int ccValue, int noteValue) {
     if (_hasConnectedDevice) {
       try {
-        // Send CC message
+        // Enviar mensaje CC - para mapeo de parámetros
         CCMessage(
           channel: _midiConfig.midiChannel,
           controller: ccValue,
           value: 127, // Full velocity
         ).send();
 
-        // Send Note On/Off for additional control
+        // Enviar Note On - para mapeo de notas/triggers
         NoteOnMessage(
           channel: _midiConfig.midiChannel,
           note: noteValue,
           velocity: 100,
         ).send();
-        Future.delayed(const Duration(milliseconds: 100), () {
+
+        // Enviar Note Off después de un delay para simular "release"
+        Future.delayed(const Duration(milliseconds: 150), () {
           NoteOffMessage(channel: _midiConfig.midiChannel, note: noteValue)
               .send();
         });
+
+        // Enviar CC con valor 0 después de un delay más largo para simular "release"
+        // Future.delayed(const Duration(milliseconds: 200), () {
+        //   CCMessage(
+        //     channel: _midiConfig.midiChannel,
+        //     controller: ccValue,
+        //     value: 0, // Release
+        //   ).send();
+        // });
 
         // _pulseController.forward();
         // Future.delayed(const Duration(milliseconds: 300), () {

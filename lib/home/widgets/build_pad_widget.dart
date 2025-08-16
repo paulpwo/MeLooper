@@ -38,17 +38,24 @@ class _BuildPadWidgetState extends State<BuildPadWidget>
     super.dispose();
   }
 
-  void _onTap() {
-    _animationController.forward().then((_) {
-      _animationController.reverse();
-    });
-    widget.onTap();
+  void _onTapDown() {
+    // Note On - cuando se presiona el dedo
+    _animationController.forward();
+    widget.onTap(); // Enviar Note On inmediatamente al presionar
+  }
+
+  void _onTapUp() {
+    // Note Off - cuando se suelta el dedo
+    _animationController.reverse();
+    // No llamar a widget.onTap() aquí para evitar doble envío
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _onTap,
+      onTapDown: (_) => _onTapDown(),
+      onTapUp: (_) => _onTapUp(),
+      onTapCancel: () => _onTapUp(),
       child: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) {

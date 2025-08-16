@@ -112,7 +112,26 @@ class PadConfigurationTab extends StatelessWidget {
               listenable: midiConfig,
               builder: (context, child) {
                 return Column(
-                  children: _buildDynamicConfigRows(midiConfig),
+                  children: [
+                    // Botón de reset
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () => midiConfig.resetToStandardCC(),
+                        icon: Icon(Icons.refresh),
+                        label: Text('Reset to Standard CC Values'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.warningColor,
+                          foregroundColor: AppTheme.textPrimary,
+                          padding:
+                              EdgeInsets.symmetric(vertical: AppTheme.spacingM),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: AppTheme.spacingM),
+                    // Configuración de pads
+                    ..._buildDynamicConfigRows(midiConfig),
+                  ],
                 );
               },
             ),

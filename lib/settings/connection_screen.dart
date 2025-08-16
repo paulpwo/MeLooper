@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 import '../config/midi_config.dart';
 
@@ -75,8 +76,24 @@ class ConnectionScreenState extends State<ConnectionScreen> {
 
   Future<void> _setupMidiDevice() async {
     try {
-      _midiCommand.addVirtualDevice(name: "MeLooper");
+      // Crear dispositivo virtual con nombre más estándar
+      _midiCommand.addVirtualDevice(name: "MeLooper MIDI");
+
+      // Esperar un poco para que el dispositivo se registre
+      await Future.delayed(const Duration(milliseconds: 1000));
+
+      // Refrescar dispositivos después de crear el virtual
       await _refreshDevices();
+      
+      // Intentar conectar automáticamente al dispositivo virtual si está disponible
+      final virtualDevices =
+          _availableDevices.where((d) => d.type == 'virtual').toList();
+      if (virtualDevices.isNotEmpty) {
+        final virtualDevice = virtualDevices.first;
+        if (!virtualDevice.connected) {
+          await _connectToDevice(virtualDevice);
+        }
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -203,6 +220,55 @@ class ConnectionScreenState extends State<ConnectionScreen> {
           ],
         ),
       );
+    }
+  }
+
+  void _testMidiMessage() {
+    if (_isConnected && selectedDevice != null) {
+      try {
+        // Enviar mensaje CC de prueba
+        CCMessage(
+          channel: _midiConfig.midiChannel,
+          controller: 1, // Mod Wheel
+          value: 127,
+        ).send();
+
+        // Enviar CC con valor 0 después de un delay
+        Future.delayed(const Duration(milliseconds: 500), () {
+          CCMessage(
+            channel: _midiConfig.midiChannel,
+            controller: 1,
+            value: 0,
+          ).send();
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('MIDI test message sent! Check your DAW.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error sending test MIDI: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please connect to a MIDI device first.'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
     }
   }
 
@@ -448,6 +514,13 @@ class ConnectionScreenState extends State<ConnectionScreen> {
                               backgroundColor: Colors.blue,
                             ),
                             child: const Text('Debug'),
+                          ),
+                          ElevatedButton(
+                            onPressed: _testMidiMessage,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                            ),
+                            child: const Text('Test MIDI'),
                           ),
                         ],
                       ),
