@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
+
 import '../config/midi_config.dart';
 
 class ConnectionScreen extends StatefulWidget {
@@ -189,7 +191,7 @@ class ConnectionScreenState extends State<ConnectionScreen> {
                             color: d.connected ? Colors.green : Colors.red,
                           ),
                         ))
-                    .toList(),
+                    ,
               ],
             ),
           ),
@@ -534,7 +536,7 @@ class ConnectionScreenState extends State<ConnectionScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildConfigItem(
-                            'MIDI Channel', '${_midiConfig.midiChannel + 1}',
+                            'MIDI Channel', '${_midiConfig.midiChannel}',
                             () {
                           _midiConfig.incrementMidiChannel();
                         }),
