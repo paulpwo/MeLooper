@@ -21,13 +21,9 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final MidiCommand _midiCommand = MidiCommand();
-  late AnimationController _pulseController;
-  late AnimationController _glowController;
 
-  // MIDI Configuration
   final MidiConfig _midiConfig = MidiConfig();
 
-  // Simple connection status
   bool _hasConnectedDevice = false;
 
   // Tab controller
@@ -36,26 +32,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-
-    _glowController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
-
-    _glowController.repeat(reverse: true);
-
-    // Initialize tab controller
     _tabController = TabController(length: 2, vsync: this);
 
-    // Check if we have any connected devices
     _checkConnectionStatus();
 
-    // Listen to MIDI configuration changes
     _midiConfig.addListener(() {
       if (mounted) {
         setState(() {});
@@ -65,8 +45,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _pulseController.dispose();
-    _glowController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -79,8 +57,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           _hasConnectedDevice = devices.any((device) => device.connected);
         });
       }
-    } catch (e) {
-      // Ignore errors, just assume no connection
+    } catch (_) {
     }
   }
 
@@ -105,10 +82,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               .send();
         });
 
-        _pulseController.forward();
-        Future.delayed(const Duration(milliseconds: 300), () {
-          _pulseController.reverse();
-        });
+        // _pulseController.forward();
+        // Future.delayed(const Duration(milliseconds: 300), () {
+        //   _pulseController.reverse();
+        // });
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
