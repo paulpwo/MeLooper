@@ -15,40 +15,94 @@ class PadConfigurationTab extends StatelessWidget {
         margin: EdgeInsets.all(AppTheme.spacingL),
         child: Column(
           children: [
-            // Header
-            Container(
-              padding: EdgeInsets.all(AppTheme.spacingL),
-              decoration: BoxDecoration(
-                color: AppTheme.cardColor.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(AppTheme.radiusL),
-                border: Border.all(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.3)),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.settings,
-                    color: AppTheme.primaryColor,
-                    size: 48,
-                  ),
-                  SizedBox(height: AppTheme.spacingM),
-                  Text(
-                    'MIDI Pad Configuration',
-                    style: AppTheme.titleLarge.copyWith(
-                      color: AppTheme.textPrimary,
-                      fontWeight: FontWeight.bold,
+            // Header e Instrucciones en la misma fila
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Card del header
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.all(AppTheme.spacingL),
+                    decoration: BoxDecoration(
+                      color: AppTheme.cardColor.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                      border: Border.all(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.3)),
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.settings,
+                          color: AppTheme.primaryColor,
+                          size: 48,
+                        ),
+                        SizedBox(height: AppTheme.spacingM),
+                        Text(
+                          'MIDI Pad Configuration',
+                          style: AppTheme.titleLarge.copyWith(
+                            color: AppTheme.textPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: AppTheme.spacingS),
+                        Text(
+                          'Configure the CC values for your MIDI pads',
+                          style: AppTheme.bodyLarge.copyWith(
+                            color: AppTheme.textTertiary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: AppTheme.spacingS),
-                  Text(
-                    'Configure the CC values for your MIDI pads',
-                    style: AppTheme.bodyLarge.copyWith(
-                      color: AppTheme.textTertiary,
+                ),
+
+                SizedBox(width: AppTheme.spacingL),
+
+                // Card de instrucciones
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.all(AppTheme.spacingL),
+                    decoration: BoxDecoration(
+                      color: AppTheme.cardColor.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusL),
+                      border: Border.all(
+                          color: AppTheme.infoColor.withValues(alpha: 0.3)),
                     ),
-                    textAlign: TextAlign.center,
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          color: AppTheme.infoColor,
+                          size: 32,
+                        ),
+                        SizedBox(height: AppTheme.spacingM),
+                        Text(
+                          'Configuration Instructions',
+                          style: AppTheme.titleMedium.copyWith(
+                            color: AppTheme.textPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: AppTheme.spacingM),
+                        Text(
+                          '• Tap each CC value to increment it\n'
+                          '• Values range from 0 to 127\n'
+                          '• Map these CC values in your DAW\n'
+                          '• All pads send CC + Note messages',
+                          style: AppTheme.bodyMedium.copyWith(
+                            color: AppTheme.textTertiary,
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             SizedBox(height: AppTheme.spacingL),
@@ -61,48 +115,6 @@ class PadConfigurationTab extends StatelessWidget {
                   children: _buildDynamicConfigRows(midiConfig),
                 );
               },
-            ),
-
-            SizedBox(height: AppTheme.spacingL),
-
-            // Instructions
-            Container(
-              padding: EdgeInsets.all(AppTheme.spacingL),
-              decoration: BoxDecoration(
-                color: AppTheme.cardColor.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(AppTheme.radiusL),
-                border: Border.all(
-                    color: AppTheme.infoColor.withValues(alpha: 0.3)),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    color: AppTheme.infoColor,
-                    size: 32,
-                  ),
-                  SizedBox(height: AppTheme.spacingM),
-                  Text(
-                    'Configuration Instructions',
-                    style: AppTheme.titleMedium.copyWith(
-                      color: AppTheme.textPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: AppTheme.spacingM),
-                  Text(
-                    '• Tap each CC value to increment it\n'
-                    '• Values range from 0 to 127\n'
-                    '• Map these CC values in your DAW\n'
-                    '• All pads send CC + Note messages',
-                    style: AppTheme.bodyMedium.copyWith(
-                      color: AppTheme.textTertiary,
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
             ),
           ],
         ),
