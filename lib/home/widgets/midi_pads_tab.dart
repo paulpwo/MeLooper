@@ -34,7 +34,7 @@ class MidiPadsTab extends StatelessWidget {
     // Dividir los pads en grupos de 8 para crear filas
     for (int i = 0; i < midiPads.length; i += 8) {
       List<MidiPad> rowPads = midiPads.skip(i).take(8).toList();
-      
+
       Widget row = Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: rowPads.map((pad) {
@@ -51,7 +51,7 @@ class MidiPadsTab extends StatelessWidget {
           );
         }).toList(),
       );
-      
+
       rows.add(row);
 
       // Agregar espacio entre filas (excepto después de la última)

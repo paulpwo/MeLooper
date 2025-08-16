@@ -84,7 +84,7 @@ class ConnectionScreenState extends State<ConnectionScreen> {
 
       // Refrescar dispositivos después de crear el virtual
       await _refreshDevices();
-      
+
       // Intentar conectar automáticamente al dispositivo virtual si está disponible
       final virtualDevices =
           _availableDevices.where((d) => d.type == 'virtual').toList();
@@ -201,14 +201,12 @@ class ConnectionScreenState extends State<ConnectionScreen> {
                 const SizedBox(height: 16),
                 const Text('Device List:',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                ..._availableDevices
-                    .map((d) => Text(
-                          '• ${d.name} (${d.type}) - ${d.connected ? "Connected" : "Disconnected"}',
-                          style: TextStyle(
-                            color: d.connected ? Colors.green : Colors.red,
-                          ),
-                        ))
-                    ,
+                ..._availableDevices.map((d) => Text(
+                      '• ${d.name} (${d.type}) - ${d.connected ? "Connected" : "Disconnected"}',
+                      style: TextStyle(
+                        color: d.connected ? Colors.green : Colors.red,
+                      ),
+                    )),
               ],
             ),
           ),
@@ -609,8 +607,7 @@ class ConnectionScreenState extends State<ConnectionScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildConfigItem(
-                            'MIDI Channel', '${_midiConfig.midiChannel}',
-                            () {
+                            'MIDI Channel', '${_midiConfig.midiChannel}', () {
                           _midiConfig.incrementMidiChannel();
                         }),
                       ],

@@ -167,7 +167,7 @@ class PadConfigurationTab extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: rowItems,
       );
-      
+
       rows.add(row);
 
       // Agregar espacio entre filas (excepto después de la última)
